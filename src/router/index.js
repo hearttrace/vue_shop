@@ -18,7 +18,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/Home.vue'),
     children: [
       { path: '/welcome', component: () => import(/* webpackChunkName: "about" */ '../components/Welcome.vue') },
-      { path: '/users', component: () => import(/* webpackChunkName: "about" */ '../components/user/Users.vue') }
+      { path: '/users', component: () => import(/* webpackChunkName: "about" */ '../components/user/Users.vue') },
+      { path: '/rights', component: () => import(/* webpackChunkName: "about" */ '../components/right/Rights.vue') },
+      { path: '/roles', component: () => import(/* webpackChunkName: "about" */ '../components/right/Roles.vue') }
     ]
   }
 ]

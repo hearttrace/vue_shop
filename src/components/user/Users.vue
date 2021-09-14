@@ -34,7 +34,7 @@
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="showUserDialog(scope.row.id)"></el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="goRemoveUser(scope.row.id)"></el-button>
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+              <el-button type="warning" icon="el-icon-setting" size="mini" @click="showRoleDialog(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -67,6 +67,21 @@
       <el-button @click="goUpdateUser">确定</el-button>
     </span>
   </el-dialog>
+
+    <el-dialog title="分配角色" :visible.sync="roleDialogVisible">
+        <p>当前的用户： {{ currentUser.username}}</p>
+        <p>当前的角色： {{ currentUser.role_name}}</p>
+        <p>
+          分配新角色：
+          <el-select v-model="selectedRoleId" placeholder="请选择">
+            <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
+          </el-select>
+        </p>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="roleDialogVisible = false">取消</el-button>
+          <el-button @click="allotRoles">确定</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -119,7 +134,10 @@ export default {
           { validator: checkMobile, trigger: 'blur' }
         ]
       },
-      isEdit: false
+      isEdit: false,
+      roleDialogVisible: false,
+      roleList: [],
+      selectedRoleId: ''
     }
   },
 
@@ -234,7 +252,28 @@ export default {
       if (res.meta.status !== 200) return this.$message.error('删除用户失败！')
       this.$message.success('删除用户成功')
       this.getUserList()
+    },
+
+    async showRoleDialog (userInfo) {
+      this.currentUser = userInfo
+      this.selectedRoleId = ''
+      const { data: res } = await this.$http.get('/roles')
+      if (res.meta.status !== 200) return this.$message.error('获取角色列表数据失败！')
+      this.roleList = res.data
+      this.roleDialogVisible = true
+    },
+
+    async allotRoles () {
+      if (!this.selectedRoleId) return this.$message.error('请选择需要分配的角色')
+      const { data: res } = await this.$http.put(`/users/${this.currentUser.id}/role`, {
+        rid: this.selectedRoleId
+      })
+      if (res.meta.status !== 200) return this.$message.error('分配角色失败！')
+      this.getUserList()
+      this.roleDialogVisible = false
+      this.$message.success('分配角色成功')
     }
+
   }
 }
 </script>
