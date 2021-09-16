@@ -20,7 +20,12 @@ const routes = [
       { path: '/welcome', component: () => import(/* webpackChunkName: "about" */ '../components/Welcome.vue') },
       { path: '/users', component: () => import(/* webpackChunkName: "about" */ '../components/user/Users.vue') },
       { path: '/rights', component: () => import(/* webpackChunkName: "about" */ '../components/right/Rights.vue') },
-      { path: '/roles', component: () => import(/* webpackChunkName: "about" */ '../components/right/Roles.vue') }
+      { path: '/roles', component: () => import(/* webpackChunkName: "about" */ '../components/right/Roles.vue') },
+      { path: '/categories', component: () => import(/* webpackChunkName: "about" */ '../components/goods/Cate.vue') },
+      { path: '/params', component: () => import(/* webpackChunkName: "about" */ '../components/goods/Params.vue') },
+      { path: '/goods', component: () => import(/* webpackChunkName: "about" */ '../components/goods/List.vue') },
+      { path: '/goods/add', component: () => import(/* webpackChunkName: "about" */ '../components/goods/Add.vue') },
+      { path: '/goods/edit', component: () => import(/* webpackChunkName: "about" */ '../components/goods/Edit.vue') }
     ]
   }
 ]
