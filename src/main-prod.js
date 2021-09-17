@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import './plugins/element.js'
+// import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 
@@ -9,9 +9,7 @@ import TreeTable from 'vue-table-with-tree-grid'
 import axios from 'axios'
 import VueQuillEditor from 'vue-quill-editor'
 
-import 'quill/dist/quill.core.css' // import styles
-import 'quill/dist/quill.snow.css' // for snow theme
-import 'quill/dist/quill.bubble.css' // for bubble theme
+import Nprogress from 'nprogress'
 
 Vue.use(VueQuillEditor)
 
@@ -21,6 +19,11 @@ axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1'
 // 请求拦截，添加权限令牌
 axios.interceptors.request.use(config => {
   config.headers.Authorization = sessionStorage.getItem('token')
+  Nprogress.start()
+  return config
+})
+axios.interceptors.response.use(config => {
+  Nprogress.done()
   return config
 })
 Vue.prototype.$http = axios
